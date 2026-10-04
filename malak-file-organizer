@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malak File Organizer</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    color: #172033;
+}
+
+header {
+    background: #172033;
+    color: white;
+    padding: 22px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 25px;
+}
+
+header p {
+    margin-top: 6px;
+    opacity: 0.75;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    padding: 25px 18px;
+}
+
+.title {
+    margin-bottom: 18px;
+    font-size: 22px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+button {
+    border: none;
+    border-radius: 15px;
+    padding: 20px 10px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    background: white;
+    color: #172033;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+.section-btn {
+    min-height: 85px;
+}
+
+.subject-btn {
+    min-height: 70px;
+}
+
+.back {
+    background: #172033;
+    color: white;
+    margin-bottom: 20px;
+    padding: 12px 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+.materials {
+    display: grid;
+    gap: 14px;
+}
+
+.material {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+.material h3 {
+    margin-bottom: 7px;
+}
+
+.material p {
+    color: #687386;
+    margin-bottom: 12px;
+}
+
+.material a {
+    display: inline-block;
+    text-decoration: none;
+    background: #172033;
+    color: white;
+    padding: 9px 15px;
+    border-radius: 9px;
+}
+
+footer {
+    text-align: center;
+    color: #8a93a3;
+    padding: 30px 10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>📚 File Organizer</h1>
+    <p>Your university materials in one place</p>
+</header>
+
+<div class="container">
+
+    <!-- SECTIONS -->
+    <div id="sectionsPage">
+        <h2 class="title">Choose your Section</h2>
+
+        <div class="grid">
+            <button class="section-btn" onclick="showSubjects(1)">Section 1</button>
+            <button class="section-btn" onclick="showSubjects(2)">Section 2</button>
+            <button class="section-btn" onclick="showSubjects(3)">Section 3</button>
+            <button class="section-btn" onclick="showSubjects(4)">Section 4</button>
+            <button class="section-btn" onclick="showSubjects(5)">Section 5</button>
+            <button class="section-btn" onclick="showSubjects(6)">Section 6</button>
+        </div>
+    </div>
+
+    <!-- SUBJECTS -->
+    <div id="subjectsPage" class="hidden">
+
+        <button class="back" onclick="goBack()">
+            ← Back
+        </button>
+
+        <h2 class="title">
+            Section <span id="sectionNumber"></span> — Subjects
+        </h2>
+
+        <div class="grid">
+
+            <button class="subject-btn"
+                onclick="showMaterials('English')">
+                🇬🇧 English
+            </button>
+
+            <button class="subject-btn"
+                onclick="showMaterials('Mathematics')">
+                📐 Mathematics
+            </button>
+
+            <button class="subject-btn"
+                onclick="showMaterials('Botany')">
+                🌿 Botany
+            </button>
+
+            <button class="subject-btn"
+                onclick="showMaterials('Organic Agriculture')">
+                🌱 Organic Agriculture
+            </button>
+
+            <button class="subject-btn"
+                onclick="showMaterials('Economics')">
+                💰 Economics
+            </button>
+
+            <button class="subject-btn"
+                onclick="showMaterials('Quality Management')">
+                ✅ Quality Management
+            </button>
+
+        </div>
+    </div>
+
+    <!-- MATERIALS -->
+    <div id="materialsPage" class="hidden">
+
+        <button class="back" onclick="showSubjects(currentSection)">
+            ← Back
+        </button>
+
+        <h2 class="title" id="subjectTitle"></h2>
+
+        <div class="materials">
+
+            <div class="material">
+                <h3>📖 Lectures</h3>
+                <p>Lecture PDFs and explanations</p>
+                <a href="#" onclick="openFiles('lectures')">Open</a>
+            </div>
+
+            <div class="material">
+                <h3>🧪 Sections</h3>
+                <p>Section materials and files</p>
+                <a href="#" onclick="openFiles('sections')">Open</a>
+            </div>
+
+            <div class="material">
+                <h3>📝 Assignments</h3>
+                <p>Assignments and required tasks</p>
+                <a href="#" onclick="openFiles('assignments')">Open</a>
+            </div>
+
+            <div class="material">
+                <h3>📄 PDFs</h3>
+                <p>New files uploaded by admins</p>
+                <a href="#" onclick="openFiles('pdfs')">Open</a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    Made for students ❤️
+</footer>
+
+<script>
+
+let currentSection = 1;
+let currentSubject = "";
+
+function showSubjects(section) {
+
+    currentSection = section;
+
+    document.getElementById("sectionsPage")
+        .classList.add("hidden");
+
+    document.getElementById("materialsPage")
+        .classList.add("hidden");
+
+    document.getElementById("subjectsPage")
+        .classList.remove("hidden");
+
+    document.getElementById("sectionNumber")
+        .innerText = section;
+}
+
+function showMaterials(subject) {
+
+    currentSubject = subject;
+
+    document.getElementById("subjectsPage")
+        .classList.add("hidden");
+
+    document.getElementById("materialsPage")
+        .classList.remove("hidden");
+
+    document.getElementById("subjectTitle")
+        .innerText = subject;
+}
+
+function openFiles(type) {
+
+    alert(
+        "Files for " +
+        currentSubject +
+        " - " +
+        type +
+        " will be added here."
+    );
+}
+
+function goBack() {
+
+    document.getElementById("subjectsPage")
+        .classList.add("hidden");
+
+    document.getElementById("materialsPage")
+        .classList.add("hidden");
+
+    document.getElementById("sectionsPage")
+        .classList.remove("hidden");
+}
+
+</script>
+
+</body>
+</html>
